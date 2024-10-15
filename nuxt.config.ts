@@ -1,12 +1,16 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-07-30',
-  future: { compatibilityVersion: 4 },
-  devtools: { enabled: true },
   modules: [
     '@nuxt/eslint',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxt/fonts',
+    '@nuxt/image'
   ],
+  devtools: { enabled: true },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' }
+  },
+  future: { compatibilityVersion: 4 },
+  compatibilityDate: '2024-07-30',
   eslint: {
     config: {
       stylistic: {
@@ -15,6 +19,15 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+  fonts: {
+    families: [
+      {
+        name: 'Poppins',
+        provider: 'google',
+        weights: [400, 500, 600, 700]
+      }
+    ]
   },
   tailwindcss: {
     editorSupport: true

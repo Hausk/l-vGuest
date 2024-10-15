@@ -2,7 +2,17 @@
 export default {
   content: [],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif']
+      },
+      fontWeight: {
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700'
+      }
+    }
   },
   plugins: []
 }
