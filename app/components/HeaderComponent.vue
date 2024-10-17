@@ -116,7 +116,7 @@ const navItems = [
 
 <style scoped>
 .blur-sm {
-  filter: blur(4px);
+  filter: blur(5px);
 }
 
 .blur-0 {
