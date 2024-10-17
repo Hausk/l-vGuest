@@ -13,13 +13,6 @@ import { relations } from 'drizzle-orm'
 export const db = drizzle(sql)
 // Create a pgTable that maps to a table in your DB
 
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').unique().notNull(),
-  createdAt: timestamp('createdAt').defaultNow().notNull()
-})
-
 export const images = pgTable('images', {
   id: serial('id').primaryKey(),
   path: text('path').notNull(),
