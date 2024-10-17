@@ -1,76 +1,9 @@
-<script setup>
-import { Parallax } from 'swiper/modules'
-import { onMounted, ref } from 'vue'
-import { useScroll } from '@vueuse/core'
-import gsap from 'gsap'
-
-const props = defineProps({
-  categories: {
-    type: Array,
-    required: true
-  }
-})
-
-const swiperRef = ref(null)
-const imgRefs = ref([])
-const textRefs = ref([])
-
-// Animation passive pour l'img (effet de drapeau)
-const animateFlag = (img) => {
-  gsap.to(img, {
-    duration: 2,
-    y: '+=10',
-    ease: 'sine.inOut',
-    repeat: -1,
-    yoyo: true
-  })
-}
-
-// Animation passive pour le texte
-const animateText = (text) => {
-  gsap.to(text, {
-    duration: 4,
-    x: '+=100',
-    ease: 'sine.inOut',
-    repeat: -1,
-    yoyo: true
-  })
-}
-
-// Animation au défilement
-const { y } = useScroll(window)
-const handleScroll = () => {
-  const scrollY = y.value
-  imgRefs.value.forEach((img, index) => {
-    gsap.to(img, {
-      y: scrollY * 0.05 * (index + 1),
-      duration: 0.5,
-      ease: 'power1.out'
-    })
-  })
-  textRefs.value.forEach((text, index) => {
-    gsap.to(text, {
-      y: scrollY * 0.05 * (index + 1),
-      x: scrollX * 0.10 * (index + 1),
-      duration: 0.5,
-      ease: 'power1.out'
-    })
-  })
-}
-imgRefs.value.forEach(animateFlag)
-onMounted(() => {
-  imgRefs.value.forEach(animateFlag)
-  textRefs.value.forEach(animateText)
-  window.addEventListener('scroll', handleScroll)
-})
-</script>
-
 <template>
   <div class="h-[calc(100vh-4rem)] w-screen overflow-hidden flex">
     <div class="my-auto w-full mx-auto h-full">
       <Swiper
         ref="swiperRef"
-        class="h-full"
+        class="h-full w-[80%] lg:w-full"
         :centered-slides="true"
         :speed="600"
         :slides-per-view="2"
@@ -88,28 +21,35 @@ onMounted(() => {
             direction: 'horizontal'
           }
         }"
-        :modules="[SwiperAutoplay, Parallax]"
+        :modules="[Parallax]"
         :loop="true"
         :parallax="true"
-        :autoplay="{
-          delay: 8000,
-          disableOnInteraction: true
-        }"
+        @slide-change="handleSlideChange"
       >
         <SwiperSlide
           v-for="(category, idx) in props.categories"
           :key="idx"
           class="flex relative"
         >
-          <div class="m-auto relative">
-            <LazyNuxtImg
-              :ref="el => { if (el) imgRefs[idx] = el }"
-              :src="category.pinnedImageUrl"
-              class="rounded-lg border-1 border-dashed border-red-500"
-            />
+          <div class="m-auto relative perspective-container">
+            <div
+              :ref="el => { if (el) imgContainerRefs[idx] = el }"
+              class="image-container overflow-hidden rounded-lg"
+            >
+              <NuxtLink
+                class="overflow-hidden rounded-lg"
+                :to="'photobox/' + category.slug"
+              >
+                <LazyNuxtImg
+                  :ref="el => { if (el) imgRefs[idx] = el }"
+                  src="https://images.unsplash.com/1/type-away.jpg"
+                  class="rounded-lg border-1 border-dashed border-red-500"
+                />
+              </NuxtLink>
+            </div>
             <p
               :ref="el => { if (el) textRefs[idx] = el }"
-              class="absolute z-10 bottom-10 left-10 text-white text-xl text-bold"
+              class="absolute z-10 bottom-5 left-5 lg:bottom-10 lg:left-10 text-white text-xl font-bold category-text"
             >
               {{ category.name }}
             </p>
@@ -120,17 +60,173 @@ onMounted(() => {
   </div>
 </template>
 
+<script setup>
+import { Parallax } from 'swiper/modules'
+import { onMounted, ref, onBeforeUnmount } from 'vue'
+import { useScroll } from '@vueuse/core'
+import gsap from 'gsap'
+
+const props = defineProps({
+  categories: {
+    type: Array,
+    required: true
+  }
+})
+console.log(props)
+
+const swiperRef = ref(null)
+const imgRefs = ref([])
+const imgContainerRefs = ref([])
+const textRefs = ref([])
+const currentAnimation = ref(null)
+
+const resetSlides = () => {
+  const allSlides = document.querySelectorAll('.swiper-slide')
+  allSlides.forEach((slide) => {
+    const container = slide.querySelector('.image-container')
+    const text = slide.querySelector('.category-text')
+    if (container && text) {
+      gsap.set([container, text], {
+        clearProps: 'all'
+      })
+    }
+  })
+}
+
+const animateActiveSlide = (container, text) => {
+  if (currentAnimation.value) {
+    currentAnimation.value.kill()
+  }
+
+  resetSlides()
+
+  const tl = gsap.timeline({
+    repeat: -1,
+    defaults: { ease: 'power2.inOut' }
+  })
+
+  // Phase 1: Zoom in + text monte légèrement
+  tl.to([container, text], {
+    scale: 1.1,
+    y: (index, target) => target.classList.contains('category-text') ? -20 : 0,
+    duration: 2.5,
+    ease: 'back.out(1.7)'
+  })
+
+  // Phase 2: Rotation gauche + text suit le mouvement
+    .to([container, text], {
+      rotate: -2,
+      scale: 1.02,
+      x: (index, target) => target.classList.contains('category-text') ? -10 : 0,
+      duration: 2,
+      ease: 'bounce.out'
+    })
+
+  // Phase 3: Rotation droite + text suit le mouvement
+    .to([container, text], {
+      rotate: 2,
+      x: (index, target) => target.classList.contains('category-text') ? 10 : 0,
+      duration: 2,
+      ease: 'bounce.out'
+    })
+
+  // Phase 4: Retour à la position initiale
+    .to([container, text], {
+      rotate: 0,
+      scale: 1,
+      x: 0,
+      y: 0,
+      duration: 2.5,
+      ease: 'back.in(1.7)'
+    })
+
+  currentAnimation.value = tl
+  return tl
+}
+
+const handleSlideChange = () => {
+  resetSlides()
+
+  setTimeout(() => {
+    const activeSlide = document.querySelector('.swiper-slide-active')
+    if (activeSlide) {
+      const container = activeSlide.querySelector('.image-container')
+      const text = activeSlide.querySelector('.category-text')
+      if (container && text) {
+        animateActiveSlide(container, text)
+      }
+    }
+  }, 0)
+}
+
+const { y } = useScroll(window)
+const handleScroll = () => {
+  const scrollY = y.value
+  const activeSlide = document.querySelector('.swiper-slide-active')
+  if (activeSlide) {
+    const text = activeSlide.querySelector('.category-text')
+    const container = activeSlide.querySelector('.image-container')
+    if (text && container) {
+      gsap.to([container, text], {
+        y: scrollY * 0.05,
+        duration: 0.5,
+        ease: 'power1.out'
+      })
+    }
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  handleSlideChange()
+})
+
+onBeforeUnmount(() => {
+  if (currentAnimation.value) {
+    currentAnimation.value.kill()
+  }
+  window.removeEventListener('scroll', handleScroll)
+})
+</script>
+
 <style>
 .swiper-slide {
     display: flex;
 }
 
+.perspective-container {
+    perspective: 1000px;
+}
+
 .swiper-slide p {
-    transition: .3s linear;
+    transition: opacity 0.3s linear;
     opacity: 0;
 }
 
 .swiper-slide-active p {
     opacity: 1;
+}
+
+.image-container {
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.category-text {
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.swiper-slide-active .image-container:hover {
+    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.swiper-slide-active .image-container:hover img {
+    transform: scale(1.1);
+}
+
+.swiper-slide-active img {
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    cursor: pointer;
 }
 </style>
