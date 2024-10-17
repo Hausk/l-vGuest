@@ -13,8 +13,13 @@
     "@nuxt/eslint": "^0.6.0",
     "@nuxt/fonts": "^0.10.0",
     "@nuxt/image": "^1.8.1",
+    "@vercel/postgres": "^0.10.0",
+    "@vueuse/core": "^11.1.0",
+    "drizzle-orm": "^0.33.0",
+    "gsap": "^3.12.5",
     "lucide-vue-next": "^0.453.0",
     "nuxt": "^3.13.0",
+    "nuxt-swiper": "^1.2.2",
     "vue": "latest",
     "vue-router": "latest"
   },

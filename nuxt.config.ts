@@ -3,7 +3,8 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
     '@nuxt/fonts',
-    '@nuxt/image'
+    '@nuxt/image',
+    'nuxt-swiper'
   ],
   devtools: { enabled: true },
   app: {
