@@ -11,6 +11,5 @@ export default eventHandler(async () => {
       }
     }
   })
-  console.log('ENTRE')
   return categories
 })
