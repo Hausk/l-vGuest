@@ -1,11 +1,13 @@
 <template>
   <div>
-    <AnimatedSlider :categories="categories" />
+    <Suspense>
+      <AnimatedSlider :categories="categories" />
+    </Suspense>
   </div>
 </template>
 
 <script lang="ts" setup>
-import AnimatedSlider from '~/components/AnimatedSlider.vue'
+import type { Category } from '~~/server/types'
 
-const { data: categories } = await useFetch('/api/categories/') as any
+const { data: categories } = await useFetch<Category[]>('/api/categories/') as any
 </script>

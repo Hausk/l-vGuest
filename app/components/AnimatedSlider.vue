@@ -1,9 +1,9 @@
 <template>
   <div class="h-[calc(100vh-4rem)] w-screen overflow-hidden flex">
-    <div class="my-auto w-full mx-auto h-full">
+    <div class="my-auto w-full mx-auto h-full flex">
       <Swiper
         ref="swiperRef"
-        class="h-full w-[80%] lg:w-full"
+        class="h-full w-[80%] md:h-auto lg:w-full my-auto"
         :centered-slides="true"
         :speed="600"
         :slides-per-view="2"
@@ -21,29 +21,32 @@
             direction: 'horizontal'
           }
         }"
-        :modules="[Parallax]"
+        :modules="[Parallax, Keyboard, Mousewheel]"
         :loop="true"
         :parallax="true"
+        :keyboard="{ enabled: true }"
+        :mousewheel="true"
         @slide-change="handleSlideChange"
       >
         <SwiperSlide
           v-for="(category, idx) in props.categories"
           :key="idx"
-          class="flex relative"
+          class="flex relative h-full w-full"
         >
-          <div class="m-auto relative perspective-container">
+          <div class="m-auto relative perspective-container h-full w-[80%]">
             <div
               :ref="el => { if (el) imgContainerRefs[idx] = el }"
-              class="image-container overflow-hidden rounded-lg"
+              class="image-container lg:overflow-hidden rounded-lg h-full w-full"
             >
               <NuxtLink
-                class="overflow-hidden rounded-lg"
+                class="overflow-hidden rounded-lg h-full w-full"
                 :to="'photobox/' + category.slug"
               >
-                <LazyNuxtImg
+                <NuxtImg
                   :ref="el => { if (el) imgRefs[idx] = el }"
-                  src="https://images.unsplash.com/1/type-away.jpg"
-                  class="rounded-lg border-1 border-dashed border-red-500"
+                  :lazy="true"
+                  :src="category.pinnedImage.path"
+                  class="rounded-lg border-1 border-dashed border-red-500 aspect-square object-cover w-full h-full"
                 />
               </NuxtLink>
             </div>
@@ -60,19 +63,16 @@
   </div>
 </template>
 
-<script setup>
-import { Parallax } from 'swiper/modules'
+<script lang="ts" setup>
+import { Keyboard, Parallax, Mousewheel } from 'swiper/modules'
 import { onMounted, ref, onBeforeUnmount } from 'vue'
 import { useScroll } from '@vueuse/core'
 import gsap from 'gsap'
+import type { Category } from '~~/server/types'
 
-const props = defineProps({
-  categories: {
-    type: Array,
-    required: true
-  }
-})
-console.log(props)
+const props = defineProps<{
+  categories: Category[]
+}>()
 
 const swiperRef = ref(null)
 const imgRefs = ref([])
@@ -175,9 +175,9 @@ const handleScroll = () => {
     }
   }
 }
-
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+
   handleSlideChange()
 })
 
@@ -210,6 +210,8 @@ onBeforeUnmount(() => {
 .image-container {
     transform-origin: center center;
     will-change: transform;
+    height: 100%;
+    width: 100%;
 }
 
 .category-text {
@@ -228,5 +230,8 @@ onBeforeUnmount(() => {
 .swiper-slide-active img {
     transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
+}
+.swiper {
+  overflow: inherit !important;
 }
 </style>
