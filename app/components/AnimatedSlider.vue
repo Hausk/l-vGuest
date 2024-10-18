@@ -44,7 +44,7 @@
               >
                 <NuxtImg
                   :ref="el => { if (el) imgRefs[idx] = el }"
-                  :lazy="true"
+                  loading="lazy"
                   :src="category.pinnedImage.path"
                   class="rounded-lg border-1 border-dashed border-red-500 aspect-square object-cover w-full h-full"
                 />

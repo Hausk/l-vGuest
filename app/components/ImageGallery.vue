@@ -14,10 +14,11 @@
       class="relative cursor-pointer w-full h-full overflow-hidden rounded-md mb-5"
       @click="openLightbox(index)"
     >
-      <LazyNuxtImg
+      <NuxtImg
         :src="image.path"
         :alt="'Image ' + index"
         class="w-full image"
+        loading="lazy"
       />
     </div>
 

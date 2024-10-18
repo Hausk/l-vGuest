@@ -19,13 +19,13 @@
         :key="index"
         class="flex items-center justify-center px-12"
       >
-        <img
+        <NuxtImg
           ref="currentImageRef"
           :src="image.path"
           :alt="'Image n' + index"
           class="max-h-[90vh] w-full lg:w-auto object-contain cursor-none rounded-md"
           loading="lazy"
-        >
+        />
       </swiper-slide>
     </swiper>
 
