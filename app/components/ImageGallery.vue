@@ -1,6 +1,6 @@
 <template>
-  <div class="columns-1 md:columns-2 lg:columns-3 text-white p-14">
-    <div class="flex flex-col py-10">
+  <div class="columns-1 md:columns-2 lg:columns-3 text-white px-4 lg:p-14">
+    <div class="flex flex-col py-4 lg:py-10">
       <p class="text-white text-4xl text-center mb-2">
         Bienvenue dans la gallerie <span class="text-red-500 uppercase font-bold">{{ props.infos.params.slug }}</span>
       </p>
@@ -9,13 +9,13 @@
       </p>
     </div>
     <div
-      v-for="(image, index) in images"
+      v-for="(image, index) in props.images"
       :key="index"
       class="relative cursor-pointer w-full h-full overflow-hidden rounded-md mb-5"
       @click="openLightbox(index)"
     >
       <LazyNuxtImg
-        :src="image.url"
+        :src="image.path"
         :alt="'Image ' + index"
         class="w-full image"
       />
@@ -23,7 +23,7 @@
 
     <LightBox
       v-if="isLightboxOpen"
-      :images="images"
+      :images="props.images"
       :current-image="currentImage"
       @close="closeLightbox"
     />
@@ -31,29 +31,12 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  infos: {
-    type: Array,
-    required: true
-  }
-})
-const randomSizes = [
-  { width: 300, height: 200 },
-  { width: 400, height: 300 },
-  { width: 250, height: 250 },
-  { width: 350, height: 250 },
-  { width: 450, height: 300 },
-  { width: 300, height: 200 },
-  { width: 400, height: 300 },
-  { width: 250, height: 250 },
-  { width: 350, height: 250 },
-  { width: 450, height: 300 }
-]
-const images = ref(
-  randomSizes.map(size => ({
-    url: `https://picsum.photos/${size.width}/${size.height}`
-  }))
-)
+import type { Image, RouteInfo } from '~~/server/types'
+
+const props = defineProps<{
+  images: Image[]
+  infos: RouteInfo
+}>()
 
 const isLightboxOpen = ref(false)
 const currentImage = ref(0)

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 flex items-center bg-black bg-opacity-95 z-40 ring-1 ring-red-500 ring-inset"
+    class="fixed inset-0 flex items-center bg-black bg-opacity-100 lg:bg-opacity-95 z-40 ring-1 ring-red-500 ring-inset"
     @click.self="close"
   >
     <swiper
@@ -17,37 +17,37 @@
       <swiper-slide
         v-for="(image, index) in images"
         :key="index"
-        class="flex items-center justify-center"
+        class="flex items-center justify-center px-12"
       >
         <img
           ref="currentImageRef"
-          :src="image.url"
+          :src="image.path"
           :alt="'Image n' + index"
-          class="max-h-[90vh] w-auto object-contain cursor-none"
+          class="max-h-[90vh] w-full lg:w-auto object-contain cursor-none rounded-md"
           loading="lazy"
         >
       </swiper-slide>
     </swiper>
 
     <button
-      class="absolute top-5 right-10 text-white cursor-pointer z-50"
+      class="absolute top-5 right-5 lg:right-10 text-white cursor-pointer z-50"
       @click="close()"
     >
       <X
-        :size="48"
+        :size="42"
         class="text-red-500"
       />
     </button>
     <button
       ref="prevButton"
-      class="absolute z-50 top-1/2 left-10 -translate-y-1/2 opacity-0"
+      class="absolute z-50 top-1/2 left-0 lg:left-10 -translate-y-1/2 opacity-0"
       @click="prevSlide()"
     >
       <ChevronLeft :size="48" />
     </button>
     <button
       ref="nextButton"
-      class="absolute z-50 top-1/2 -translate-y-1/2 right-10 opacity-0"
+      class="absolute z-50 top-1/2 -translate-y-1/2 right-0 lg:right-10 opacity-0"
       @click="nextSlide()"
     >
       <ChevronRight :size="48" />
@@ -67,10 +67,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { X, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import gsap from 'gsap'
-
-interface Image {
-  url: string
-}
+import type { Image } from '~~/server/types'
 
 const props = defineProps<{
   images: Image[]
