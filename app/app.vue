@@ -6,6 +6,19 @@
   </div>
 </template>
 
+<script setup>
+useSeoMeta({
+  title: 'Libre & Vivant',
+  description: 'Site web de photographie'
+})
+useHead({
+  title: 'Libre & Vivant',
+  meta: [
+    { name: 'description', content: 'Site web de photographie' }
+  ]
+})
+</script>
+
 <style>
 html, :host {
   font-family: "Poppins", "sans-serif" !important;

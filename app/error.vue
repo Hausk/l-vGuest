@@ -2,8 +2,8 @@
 import type { NuxtError } from '#app'
 
 useSeoMeta({
-  title: 'Page not found',
-  description: 'We are sorry but this page could not be found.'
+  title: 'Libre & Vivant | Page Introuvable',
+  description: 'Désolé, la page est introuvable.'
 })
 
 defineProps({

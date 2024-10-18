@@ -9,6 +9,12 @@ if (!imagesList.value) {
     statusMessage: 'Page Not Found'
   })
 }
+useHead({
+  title: `Libre & Vivant - ${route.params.slug}`,
+  meta: [
+    { name: 'description', content: `Gallerie photo ${route.params.slug}` }
+  ]
+})
 </script>
 
 <template>
