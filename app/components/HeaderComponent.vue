@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Menu, X, Home, Camera, Info } from 'lucide-vue-next'
+import { Menu, X, Home, Camera } from 'lucide-vue-next'
 
 const route = useRoute()
 const isDrawerOpen = ref(false)
@@ -16,8 +15,7 @@ const closeDrawer = () => {
 
 const navItems = [
   { name: 'Accueil', path: '/', icon: Home },
-  { name: 'Photobox', path: '/photobox', icon: Camera },
-  { name: 'Contact', path: '/contact', icon: Info }
+  { name: 'Boîte à photos', path: '/photobox', icon: Camera }
 ]
 </script>
 
@@ -40,8 +38,8 @@ const navItems = [
             v-for="item in navItems"
             :key="item.path"
             :to="item.path"
-            class="capitalize font-medium hover:text-red-500 transition-all"
-            :class="route.path == item.path ? 'text-red-500 border-b-2 border-red-500' : ''"
+            class="font-medium hover:text-red-500 transition-all"
+            :class="route.path == item.path || (route.path.startsWith('/photobox') && item.path.startsWith('/photobox')) ? 'text-red-500 border-b-2 border-red-500' : ''"
           >
             {{ item.name }}
           </NuxtLink>
@@ -58,14 +56,14 @@ const navItems = [
               'absolute transition-all duration-300 ease-in-out',
               isDrawerOpen ? 'opacity-0 rotate-180 blur-sm' : 'opacity-100 rotate-0 blur-0'
             ]"
-            size="32"
+            :size="32"
           />
           <X
             :class="[
               'absolute transition-all duration-300 ease-in-out',
               isDrawerOpen ? 'opacity-100 -rotate-0 blur-0' : 'opacity-0 -rotate-180 blur-sm'
             ]"
-            size="32"
+            :size="32"
           />
         </button>
       </div>
@@ -80,11 +78,11 @@ const navItems = [
   />
   <div
     :class="[
-      'fixed right-0 top-16 h-[calc(100vh-4rem)] w-full bg-black text-white z-20 transform transition-all duration-500 ease-in-out overflow-y-auto border-l border-red-500',
+      'fixed right-0 top-16 h-[calc(100vh-4rem)] w-full bg-black text-white z-20 transform transition-all duration-500 ease-in-out overflow-y-auto',
       isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
     ]"
   >
-    <div class="p-6 flex flex-col h-full">
+    <div class="p-6 flex flex-col h-full lg:hidden">
       <h2 class="text-3xl font-bold mb-8 text-red-500 text-center">
         Navigation
       </h2>
@@ -93,19 +91,28 @@ const navItems = [
           v-for="item in navItems"
           :key="item.path"
           :to="item.path"
-          class="py-4 px-4 my-2 text-2xl capitalize font-medium hover:bg-red-500 hover:text-white transition-all rounded-lg flex items-center"
-          :class="route.path == item.path ? 'bg-red-500 text-white' : ''"
+          class="py-4 px-4 my-2 text-2xl capitalize transition-all rounded-lg flex items-center"
           @click="closeDrawer"
         >
-          <component
-            :is="item.icon"
-            class="mr-4"
-            size="28"
+          <span
+            class="bg-red-500 rounded-full w-3 h-3 mr-6"
+            :class="route.path == item.path || (route.path.startsWith('/photobox') && item.path.startsWith('/photobox')) ? 'opacity-1' : 'opacity-0'"
           />
-          {{ item.name }}
+          <span
+            class="text-left"
+            :class="route.path == item.path || (route.path.startsWith('/photobox') && item.path.startsWith('/photobox')) ? 'font-semibold' : 'font-medium'"
+          >
+            {{ item.name }}
+          </span>
         </NuxtLink>
       </nav>
-      <div class="mt-auto pt-8 border-t border-gray-800">
+      <div
+        class="
+            mt-auto
+            pt-8
+            border-t
+            border-gray-800"
+      >
         <p class="text-sm text-gray-500 text-center">
           &copy; 2024 Libre & Vivant. Tous droits réservés.
         </p>
