@@ -33,7 +33,7 @@
           :key="idx"
           class="flex relative h-full w-full"
         >
-          <div class="m-auto relative perspective-container h-full w-[80%]">
+          <div class="m-auto relative perspective-container h-[80%] lg:h-full w-[80%]">
             <div
               :ref="el => { if (el) imgContainerRefs[idx] = el }"
               class="image-container lg:overflow-hidden rounded-lg h-full w-full"
