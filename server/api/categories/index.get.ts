@@ -11,5 +11,5 @@ export default eventHandler(async () => {
       }
     }
   })
-  return categories
+  return categories.filter(category => category.pinnedImage !== null)
 })
