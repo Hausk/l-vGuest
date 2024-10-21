@@ -32,8 +32,9 @@
           v-for="(category, idx) in props.categories"
           :key="idx"
           class="flex relative h-full w-full"
+          :v-if="category.pinnedImage.path"
         >
-          <div class="m-auto relative perspective-container h-[80%] lg:h-full w-[80%]">
+          <div class="m-auto relative perspective-container h-[70%] lg:h-full w-[70%] 2xl:w-[80%]">
             <div
               :ref="el => { if (el) imgContainerRefs[idx] = el }"
               class="image-container lg:overflow-hidden rounded-lg h-full w-full"

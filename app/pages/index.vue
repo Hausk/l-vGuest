@@ -1,19 +1,19 @@
 <template>
-  <section class="h-[calc(100vh-4rem)] flex">
+  <section class="h-[calc(100vh-4rem)] xl:overflow-hidden flex">
     <div class="w-[80%] m-auto h-fit">
       <div class="flex flex-col xl:flex-row items-center justify-between xl:pt-8 xl:pb-24">
         <div class="text-center xl:text-left order-2 xl:order-none">
           <span class="text-xl bg-red-500 text-black px-5 py-2 border-red-500 rounded-md hidden xl:block w-fit">Photographe</span>
           <div class="overflow-hidden py-2">
             <h1
-              class="text-4xl lg:text-[80px] xl:h1 text-white xl:font-semibold xl:leading-[1.1] transition-transform duration-500"
+              class="text-4xl 2xl:text-[80px] xl:h1 text-white xl:font-semibold xl:leading-[1.1] transition-transform duration-500"
             >
               Bonjour, je suis
             </h1>
           </div>
           <div class="overflow-hidden pb-2">
             <span
-              class="text-red-500 font-bold text-4xl xl:text-[80px] xl:font-semibold xl:leading-[1.1] transition-transform duration-500"
+              class="text-red-500 font-bold text-4xl xl:text-[60px] 2xl:text-[80px] xl:font-semibold xl:leading-[1.1] transition-transform duration-500"
             >
               Victoria
             </span>
@@ -87,7 +87,7 @@
         </div>
         <div class="order-1">
           <div class="relative h-full w-full">
-            <div class="w-[70vw] h-[70vw] xl:w-[498px] xl:h-[498px] mix-blend-lighten relative top-0 opacity-100">
+            <div class="w-[70vw] h-[70vw] xl:w-[35vw] xl:h-[35vw] mix-blend-lighten relative top-0 opacity-100">
               <img
                 src="/header.png"
                 alt="Vitória"
@@ -95,7 +95,7 @@
               >
             </div>
             <svg
-              class="absolute inset-0 w-[70vw] h-[70vw] xl:w-[498px] xl:h-[498px] top-0 circle-animation"
+              class="absolute inset-0 w-[70vw] h-[70vw] xl:w-[35vw] xl:h-[35vw] top-0 circle-animation"
               viewBox="0 0 320 320"
             >
               <path
